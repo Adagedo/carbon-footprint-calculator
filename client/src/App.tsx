@@ -1,20 +1,49 @@
-import { ThemContextProvider } from "./components/Context/ThemeContext";
-import Box from "./components/Context/Box";
-import Private from "./components/comspro/Private";
-import Profile from "./components/comspro/Profile";
-import Toast from "./components/generics/Toast";
-import CustomBtn from "./components/generics/CustomBtn";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import PrivateLayOut from "./layouts/private/PrivateLayOut";
+import PublicLayOut from "./layouts/public/PublicLayOut";
+import PHome from "./Home/public/PHome";
+import Login from "./users_logins/Login/Login";
+import Register from "./users_logins/Register/Register";
+import PvHome from "./Home/private/PvHome";
+
+const router = createBrowserRouter([
+	{
+		path: "/",
+		element: <PrivateLayOut />,
+		children: [
+			{
+				element: <PvHome />,
+				index: true,
+				/* ......children  */
+			},
+		],
+	},
+	{
+		path: "/",
+		element: <PublicLayOut />,
+		children: [
+			{
+				path: "pv-home",
+				element: <PHome />,
+
+				index: true,
+			},
+			{
+				path: "login",
+				element: <Login />,
+			},
+			{
+				path: "register",
+				element: <Register />,
+			},
+		],
+	},
+]);
+
 export default function App() {
 	return (
 		<div>
-			<ThemContextProvider>
-				<Box />
-			</ThemContextProvider>
-			<Private isLoggedIn={true} Component={Profile} />
-			<Toast position="left-center" />
-			<CustomBtn variant="primary">
-				<div className="div">Hello</div>
-			</CustomBtn>
+			<RouterProvider router={router} />
 		</div>
 	);
 }

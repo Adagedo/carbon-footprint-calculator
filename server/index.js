@@ -1,20 +1,23 @@
-function Inplit(number) {
-	for (let x = 0; x <= number; x++) {
-		let row = "";
+const express = require("express");
+const dotenv = require("dotenv");
+const db = require("./src/database/db");
+dotenv.config();
+const Users = require("./src/database/models/Users");
+const sequelize = require("./src/database/db");
 
-		for (let y = 0; y <= x; y++) {
-			row += "&";
-		}
-		console.log(row);
+const app = express();
+
+const port = process.env.PORT;
+
+async function sync() {
+	try {
+		await sequelize.sync({ force: false });
+		console.log("Database tables created sucessfully");
+	} catch (error) {
+		console.log("error creating table", error);
 	}
 }
-
-console.log(Inplit(8));
-
-function exponent(base, power) {
-	let result = 1;
-	for (let count = 0; count < power; count++) {
-		result = result * base;
-	}
-	return result;
-}
+sync();
+app.listen(port, () => {
+	console.log(`server running on port ${port}`);
+});

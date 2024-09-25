@@ -1,2 +1,4 @@
 node_modules
 .env
+sourcecode.js
+test.js
