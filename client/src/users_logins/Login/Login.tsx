@@ -40,7 +40,7 @@ export default function Login() {
 								},
 							})}
 						/>
-						{errors.email?.message}
+						<div className="error">{errors.email?.message}</div>
 					</div>
 					<div className="password">
 						<label htmlFor="password">Passowrd</label>
@@ -59,6 +59,7 @@ export default function Login() {
 								},
 							})}
 						/>
+						<div className="error">{errors.password?.message}</div>
 					</div>
 					<div className="actions">
 						<Button>Login</Button>

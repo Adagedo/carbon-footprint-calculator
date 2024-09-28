@@ -1,7 +1,9 @@
-const { validationResult } = require("express-validator");
-const { UserSignupValidations } = require("../validation/RegisterValidation");
+const UserSignupValidations = require("../validation/RegisterValidation");
 const express = require("express");
-
+const RegisterContoller = require("../controllers/Register");
 const router = express.Router();
+const AuthenticationController = require("../controllers/authentication");
+router.post("/register", RegisterContoller);
+router.post("/verify-token", AuthenticationController);
 
-router.post("/register", UserSignupValidations, controllers);
+module.exports = router;

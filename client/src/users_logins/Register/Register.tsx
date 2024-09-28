@@ -2,17 +2,36 @@ import { useForm } from "react-hook-form";
 import { Button, Input } from "@mui/material";
 import { RegisterTypes } from "./types/Register";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import "./styles.css";
 
 export default function Register() {
+	const navigate = useNavigate();
 	const {
 		register,
 		formState: { errors },
 		handleSubmit,
 	} = useForm<RegisterTypes>();
 	async function OnRegister(data: RegisterTypes) {
+		const { name, email, password } = data;
+		console.log({ name, email, password });
 		try {
-			const response = await axios.post("/api/register", data); // Ensure you have the correct URL here
+			const response = await axios.post(
+				"http://localhost:5000/register",
+				{
+					name,
+					email,
+					password,
+				},
+				{
+					withCredentials: true,
+					headers: {
+						"Content-Type": "application/json", // If you're using authorization tokens
+					},
+				}
+			); // Ensure you have the correct URL here
 			console.log(response.data);
+			navigate("/verify-token");
 		} catch (error) {
 			console.error(error);
 		}
@@ -20,11 +39,15 @@ export default function Register() {
 	return (
 		<div>
 			<div className="form">
+				<div className="head">
+					<h1 className="regHead">Creat Account</h1>
+				</div>
 				<form onSubmit={handleSubmit(OnRegister)}>
 					{/* Name Field */}
 					<div className="name">
 						<label htmlFor="name">Name</label>
 						<Input
+							className="input"
 							id="name"
 							placeholder="name"
 							{...register("name", {
@@ -41,11 +64,16 @@ export default function Register() {
 					<div className="email">
 						<label htmlFor="email">Email</label>
 						<Input
+							className="input"
 							id="email"
 							placeholder="Enter your email"
 							type="email"
 							{...register("email", {
 								required: "Email is required",
+								pattern: {
+									value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+									message: "Invalid email format",
+								},
 							})}
 						/>
 						<div className="error">{errors.email?.message}</div>
@@ -55,6 +83,7 @@ export default function Register() {
 					<div className="password">
 						<label htmlFor="password">Password</label>
 						<Input
+							className="input"
 							id="password"
 							placeholder="Password"
 							type="password"

@@ -1,28 +1,30 @@
 const { validationResult } = require("express-validator");
-const { UserSignupValidations } = require("../validation/RegisterValidation");
 const Users = require("../database/models/Users");
 const bcrypt = require("bcryptjs");
 const __Mailer__ = require("../notifications/notifyOauth");
-const Access_code = require("../utils/AuthsToken");
+const AuthsCode = require("../utils/AuthsToken");
+const HashedPassword = require("../utils/hashedpswd");
 
-const Register = async (UserSignupValidations, request, response) => {
+const RegisterContoller = async (request, response) => {
 	const { name, email, password } = request.body;
-	const error = validationResult(request);
-	if (error.isEmpty()) {
-		response.status(400).send({ error: error.array() });
-	}
+	console.log({ name, email, password });
 	try {
-		const token = Access_code();
+		const _HashedPassword = HashedPassword(password);
+		const Code = AuthsCode();
 		//hash hte password be saving to the databse
-		__Mailer__(email, "Your Access Code", token);
-		await Users.create({ name, email, password, token });
+		__Mailer__(email, "Your Access Code", Code);
+		console.log(_HashedPassword);
+		await Users.create({ name, email, password: _HashedPassword });
 		response.send("register successfull");
 	} catch (error) {
 		//send error resposnse
+		response.status(404).send(error);
 		console.log(error);
 	}
 
 	//
 };
+/* bcrypt.compareSync("B4c0/\/", hash); // true
+bcrypt.compareSync("not_bacon", hash); /*/
 
-module.exports = Register;
+module.exports = RegisterContoller;

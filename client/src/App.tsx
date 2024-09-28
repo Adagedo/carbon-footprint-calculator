@@ -5,16 +5,21 @@ import PHome from "./Home/public/PHome";
 import Login from "./users_logins/Login/Login";
 import Register from "./users_logins/Register/Register";
 import PvHome from "./Home/private/PvHome";
-
+import Verify from "./users_logins/Verification/Verify";
+import CalculateEmit from "./Emissions/CalculateEmit";
 const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <PrivateLayOut />,
 		children: [
 			{
+				path: "/home",
 				element: <PvHome />,
 				index: true,
-				/* ......children  */
+			},
+			{
+				path: "/emmission",
+				element: <CalculateEmit />,
 			},
 		],
 	},
@@ -35,6 +40,10 @@ const router = createBrowserRouter([
 			{
 				path: "register",
 				element: <Register />,
+			},
+			{
+				path: "verify-token",
+				element: <Verify />,
 			},
 		],
 	},
